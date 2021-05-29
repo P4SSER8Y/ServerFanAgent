@@ -1,0 +1,4 @@
+secret.py
+__pycache__
+private_plugins/*
+!private_plugins/__init__.py
