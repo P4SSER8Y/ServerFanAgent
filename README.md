@@ -4,6 +4,8 @@ ServerFan Agent
 Changelogs
 ----------------
 + 2021-05-30
+    - v0.3
+        - handle exceptions and print callstack
     - v0.2
         - add switches for every plugin
 

@@ -6,21 +6,31 @@ import pkgutil
 import importlib
 import ServerFan
 import re
+import traceback
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("main")
 
 executor = ThreadPoolExecutor(16, thread_name_prefix="worker")
 
+def excetion_wrapper(f, *args, **kwargs):
+    try:
+        return f(*args, **kwargs) 
+    except KeyboardInterrupt as e:
+        raise e
+    except Exception as e:
+        logger.fatal(f"Traceback:\n{traceback.format_exc()}")
+        logger.fatal(f("Exception: {e}"))
+        return None
+
 
 def dispatch(handler, msg):
     logger = logging.getLogger(threading.current_thread().name)
     logger.info(f"id={msg['id']} message={msg['message']}")
-    executor.submit(handler, msg["id"], msg["message"])
+    executor.submit(excetion_wrapper, handler, msg["id"], msg["message"])
 
 
 def find_plugins(path):
-    logger = logging.getLogger("main")
     ret = []
     for module in pkgutil.walk_packages([path]):
         if module.module_finder.path == path:
@@ -48,7 +58,7 @@ def main():
     try:
         while True:
             logger.debug("pull one job")
-            ret = ServerFan.get_job()
+            ret = excetion_wrapper(ServerFan.get_job)
             if ret:
                 logger.info(f"get one message from {ret['id']}")
                 for handler in handlers:
@@ -58,6 +68,7 @@ def main():
             else:
                 sleep(10)
     except KeyboardInterrupt:
+        executor.shutdown()
         logger.info("goodbye")
 
 
