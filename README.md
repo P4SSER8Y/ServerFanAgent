@@ -4,6 +4,8 @@ ServerFan Agent
 Changelogs
 ----------------
 + 2021-05-30
+    - v0.5
+        - print PID when started
     - v0.4
         - add API of report_running
     - v0.3

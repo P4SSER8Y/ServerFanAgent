@@ -7,6 +7,7 @@ import importlib
 import ServerFan
 import re
 import traceback
+import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("main")
@@ -52,6 +53,7 @@ def find_plugins(path):
 def main():
     logger = logging.getLogger("main")
     logger.info("hello world")
+    logger.info(f"PID={os.getpid()}")
     handlers = []
     handlers = handlers + find_plugins("private_plugins")
     handlers = handlers + find_plugins("public_plugins")
