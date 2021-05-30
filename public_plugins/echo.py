@@ -1,6 +1,7 @@
 import logging
 import ServerFan
 
+enabled = False
 pattern = r".*"
 
 def handler(id, msg):
