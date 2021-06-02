@@ -3,6 +3,11 @@ ServerFan Agent
 
 Changelogs
 ----------------
++ 2021-06-03
+    - v0.6
+        - fix one bug when exception occurred
+        - add hot & cold states with different update rate
+
 + 2021-05-30
     - v0.5
         - print PID when started

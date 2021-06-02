@@ -21,7 +21,7 @@ def excetion_wrapper(f, *args, **kwargs):
         raise e
     except Exception as e:
         logger.fatal(f"Traceback:\n{traceback.format_exc()}")
-        logger.fatal(f("Exception: {e}"))
+        logger.fatal(f"Exception: {e}")
         return None
 
 
@@ -57,18 +57,25 @@ def main():
     handlers = []
     handlers = handlers + find_plugins("private_plugins")
     handlers = handlers + find_plugins("public_plugins")
+    cnt = 60
     try:
         while True:
             logger.debug("pull one job")
             ret = excetion_wrapper(ServerFan.get_job)
             if ret:
+                cnt = 60
                 logger.info(f"get one message from {ret['id']}")
                 for handler in handlers:
                     if re.match(handler[1], ret["message"]):
                         logger.info(f"match {handler[0]}")
                         executor.submit(dispatch, handler[2], ret)
+                continue
             else:
-                sleep(10)
+                if cnt >= 0:
+                    cnt = cnt - 1
+                    sleep(5)
+                else:
+                    sleep(60)
     except KeyboardInterrupt:
         executor.shutdown()
         logger.info("goodbye")
