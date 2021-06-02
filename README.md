@@ -4,6 +4,8 @@ ServerFan Agent
 Changelogs
 ----------------
 + 2021-06-03
+    - v0.7
+        - add startup script for linux
     - v0.6
         - fix one bug when exception occurred
         - add hot & cold states with different update rate
